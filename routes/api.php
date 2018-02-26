@@ -1,5 +1,5 @@
 <?php
-
+use App\Expenses as ExpensesModel;
 use Illuminate\Http\Request;
 
 /*
@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('expenses','ExpensesController@index');
+Route::get('expenses/{expenses}', 'ExpensesController@show');
+Route::post('expenses','ExpensesController@create');
+Route::put('expenses/{expenses}','ExpensesController@update');
+Route::delete('expenses/{expenses}','ExpensesController@delete');
+
+
