@@ -9,7 +9,7 @@ class ExpensesController extends Controller
 {
     public function index()
     {
-        return ExpensesModel::all();
+        return response(ExpensesModel::all(),200);
     }
 
     public function show(Request $request,ExpensesModel $expense)
@@ -17,7 +17,7 @@ class ExpensesController extends Controller
         $requestedExpense = $expense::find($request->get('id'));
 
         if (empty($requestedExpense)){
-            return response()->json('Resource does not exist 404!',404);
+            return response()->json("Resource does not exist 404!",404);
         }
 
         return response()->json($requestedExpense,200);
@@ -38,7 +38,7 @@ class ExpensesController extends Controller
         $requestedExpense = $expense::find($entryId);
 
         if (empty($requestedExpense)){
-            return response()->json('Resource does not exist 404!',404);
+            return response()->json("Resource does not exist 404!",404);
         }
 
         $requestedExpense->update($request->all());
@@ -51,10 +51,10 @@ class ExpensesController extends Controller
         $requestedExpense = $expense::find($request->get('id'));
 
         if (empty($requestedExpense)){
-            return response()->json('Resource does not exist 404!',404);
+            return response()->json("Resource does not exist 404!",404);
         }
 
         $requestedExpense->delete();
-        return response()->json('Resource deleted successfully 204!',204);
+        return response()->json('',204);
     }
 }
