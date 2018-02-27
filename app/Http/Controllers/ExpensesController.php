@@ -14,27 +14,47 @@ class ExpensesController extends Controller
 
     public function show(Request $request,ExpensesModel $expense)
     {
-        return $expense::find($request->get('id'));
+        $requestedExpense = $expense::find($request->get('id'));
+
+        if (empty($requestedExpense)){
+            return response()->json('Resource does not exist 404!',404);
+        }
+
+        return response()->json($requestedExpense,200);
     }
 
     public function create(Request $request)
     {
-        $expense = ExpensesModel::create($request->all());
 
-        return response()->json($expense,201);
+        ExpensesModel::create($request->all());
+
+        return response()->json("Resource created successfully 201",201);
     }
 
     public function update(Request $request, ExpensesModel $expense)
     {
-        $expense->update($request->all());
 
-        return response()->json($expense,200);
+        $entryId = $request->get('id');
+        $requestedExpense = $expense::find($entryId);
+
+        if (empty($requestedExpense)){
+            return response()->json('Resource does not exist 404!',404);
+        }
+
+        $requestedExpense->update($request->all());
+
+        return response()->json("The entry $entryId has been successfully updated!",200);
     }
 
-    public function delete(ExpensesModel $expense)
+    public function delete(Request $request,ExpensesModel $expense)
     {
-        $expense->delete();
+        $requestedExpense = $expense::find($request->get('id'));
 
-        return response()->json(null,204);
+        if (empty($requestedExpense)){
+            return response()->json('Resource does not exist 404!',404);
+        }
+
+        $requestedExpense->delete();
+        return response()->json('Resource deleted successfully 204!',204);
     }
 }
