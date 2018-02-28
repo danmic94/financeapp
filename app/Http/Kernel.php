@@ -19,6 +19,8 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrustProxies::class,
+        // Added in order to permit the access of routes by ajax calls in the views
+        \Barryvdh\Cors\HandleCors::class,
     ];
 
     /**
