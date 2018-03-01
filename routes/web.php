@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('showexpenses');
 });
+
+Route::get('/chart', function () {
+    return view('chart');
+});

@@ -1,9 +1,22 @@
 <!DOCTYPE html>
 <html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="utf-8">
+
+    <title>Expenses</title>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" crossorigin="anonymous">
 </head>
 <body>
+
+<div class="container">
+    <div class="jumbotron mt-3">
+        <h1 class="text-center">All data</h1>
+        <p class="lead text-center">All expenses data using ajax call and JavaScript to generate the table.</p>
+        <p class="lead text-center">Extracted form /api/expenses endpoint.</p>
+    </div>
+</div>
+
 
 <div class="container">
     <table class="table">
@@ -20,11 +33,25 @@
         {{--JavaScript Rendered Table form API route call api/expenses --}}
         </tbody>
     </table>
+    </br></br>
 </div>
+<nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Finance App</a>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="/chart">Chart</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 </body>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/jquery3.3.1.min.js') }}" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/popper.min.js') }}" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/bootstrap4.0.0.min.js') }}" crossorigin="anonymous"></script>
     <script type="application/javascript">
 
         // <tr>
