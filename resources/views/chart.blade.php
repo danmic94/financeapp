@@ -25,6 +25,7 @@
 </div>
 
 </br></br>
+</br></br>
 
 <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
     <a class="navbar-brand" href="/index.php">Finance App</a>

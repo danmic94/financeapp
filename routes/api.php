@@ -14,7 +14,8 @@ use Illuminate\Http\Request;
 */
 
 Route::get('expenses','ExpensesController@index');
-Route::get('expenses/{expenses}', 'ExpensesController@show');
+Route::get('expenses/weekly', 'ExpensesController@weekly');
+Route::get('expenses/show', 'ExpensesController@show');
 Route::post('expense','ExpensesController@create');
 Route::put('expenses/{expenses}','ExpensesController@update');
 Route::delete('expenses/{expenses}','ExpensesController@delete');
