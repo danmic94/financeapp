@@ -27,6 +27,7 @@
             <th scope="col">Cost</th>
             <th scope="col">Currency</th>
             <th scope="col">Date</th>
+            <th scope="col">Action</th>
         </tr>
         </thead>
         <tbody id="main-content">
@@ -40,7 +41,7 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="\">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled" href="/chart">Chart</a>
@@ -63,6 +64,7 @@
 
         function renderTable(data) {
             var table = $('#main-content');
+            var delteRoute =  'http://localhost:8000/api/expenses/delete';
             //Process the data into nice table rows to be appended to HTML Table
             for (var i = 0, len = data.length; i < len; i++) {
 
@@ -78,6 +80,8 @@
                 table.append('<td>' + currentCost + '</td>');
                 table.append('<td>' + currentCurrency + '</td>');
                 table.append('<td>' + currentDate + '</td>');
+                table.append('<td>' + '<a class="container" href=' + delteRoute + '?id=' +currentId +
+                             '>' + '<img src=' + '{{ asset('x-circle.svg') }}' + '></a>' + '</td>');
                 table.append('</tr>');
 
             }
