@@ -47,14 +47,38 @@
 <script src="{{ asset('js/bootstrap4.0.0.min.js') }}" crossorigin="anonymous"></script>
 <script src="{{ asset('js/Chart.min.js') }}" crossorigin="anonymous"></script>
 <script type="application/javascript">
+
+    function getJson(url) {
+        return JSON.parse($.ajax({
+            url: url,
+            type: 'GET',
+            crossDomain: true,
+            dataType: 'json',
+            async: false,
+            success: function (result) {
+                return result;
+            },
+            error: function() { alert('Request Failed!'); }
+        }).responseText);
+    }
+
+    var weeklyResponse = getJson('http://localhost:8000/api/expenses/weekly');
+    var days = [];
+    var costs = [];
+
+    for (var i = 0;i < weeklyResponse.length; i++){
+        days.push(weeklyResponse[i].date);
+        costs.push(weeklyResponse[i].cost);
+    }
+
     var ctx = document.getElementById("myChart").getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+            labels: days,
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                label: '# Expenses',
+                data: costs,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
