@@ -40,6 +40,11 @@
     <a class="navbar-brand" href="/">Finance App</a>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#formModal">
+                    New Cost
+                </button>
+            </li>
             <li class="nav-item active">
                 <a class="nav-link" href="\">Home <span class="sr-only">(current)</span></a>
             </li>
@@ -49,30 +54,71 @@
         </ul>
     </div>
 </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="expenseModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="expenseModal">New Expense</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="description">Expense description :</label>
+                        <textarea type="text" class="form-control" id="description" aria-describedby="emailHelp" placeholder="Enter description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="cost">Ammount :</label>
+                        <input type="number" class="form-control" id="cost" placeholder="How much?">
+                    </div>
+                    <div class="form-group">
+                        <label for="currency">Currency :</label>
+                        <select class="form-control" id="currency">
+                            <option value="RON" selected>RON</option>
+                            <option value="EUR">EUR</option>
+                            <option value="BGP">BGP</option>
+                            <option value="USD">USD</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date :</label>
+                        <input type="date" class="form-control" id="date">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="newexpense" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </body>
     <script src="{{ asset('js/jquery3.3.1.min.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('js/popper.min.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('js/bootstrap4.0.0.min.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('js/sweetalerts2.js') }}" crossorigin="anonymous"></script>
     <script type="application/javascript">
-
-        // <tr>
-        // <th scope="row">1</th>
-        //     <td>Mark</td>
-        //     <td>Otto</td>
-        //     <td>@mdo</td>
-        // </tr>
-
-        $(document).ready(function(){
-            $.ajax({
-                url: 'http://localhost:8000/api/expenses',
-                type: 'GET',
-                crossDomain: true,
-                dataType: 'json',
-                success: function(result) { renderTable(result); },
-                error: function() { alert('Table rendering Failed!'); }
+        var renderAjax = function(){
+            $(document).ready(function(){
+                $.ajax({
+                    url: 'http://localhost:8000/api/expenses',
+                    type: 'GET',
+                    crossDomain: true,
+                    dataType: 'json',
+                    success: function(result) { renderTable(result); },
+                    error: function() { alert('Table rendering Failed!'); }
+                });
             });
-        });
+        };
+
+        renderAjax();
 
         function renderTable(data) {
             var table = $('#main-content');
@@ -100,6 +146,7 @@
 
             }
 
+            //Handling the delete action of expense entries
             $('a.delete').click(function(event) {
                 event.preventDefault();
                 var deleteUrl = $(event.currentTarget)[0].getAttribute('href');
@@ -112,7 +159,7 @@
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
-                    console.log(typeof result.value);
+
                     if (result.value) {
 
                     $.ajax({
@@ -138,6 +185,43 @@
                     });
                 }
             })
+            });
+            ///////////////////////////////////////////////
+            $('button#newexpense').click(function(event) {
+                event.preventDefault();
+                var createURL = 'http://localhost:8000/api/expense';
+                var newExpense = {
+                    'description':$('#description').val(),
+                    'cost':$('#cost').val(),
+                    'currency':$('#currency').val(),
+                    'date':$('#date').val()
+                };
+
+                $.ajax({
+                    url: createURL,
+                    type: 'POST',
+                    crossDomain: true,
+                    data: newExpense,
+                    dataType: 'json',
+                    success: function() {
+                        $('#formModal').modal('toggle');
+                        swal(
+                        'New entry created!',
+                        'New expense was added to the database!',
+                        'success'
+                    );
+                        location.reload();
+                    },
+                    error: function() {
+                        $('#formModal').modal('toggle');
+                        swal(
+                        'Failed!',
+                        'New expense was not created!',
+                        'error'
+                    );
+                        location.reload();
+                    }
+                });
             });
 
         }
