@@ -53,6 +53,7 @@
     <script src="{{ asset('js/jquery3.3.1.min.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('js/popper.min.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('js/bootstrap4.0.0.min.js') }}" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/sweetalerts2.js') }}" crossorigin="anonymous"></script>
     <script type="application/javascript">
 
         // <tr>
@@ -62,10 +63,23 @@
         //     <td>@mdo</td>
         // </tr>
 
+        $(document).ready(function(){
+            $.ajax({
+                url: 'http://localhost:8000/api/expenses',
+                type: 'GET',
+                crossDomain: true,
+                dataType: 'json',
+                success: function(result) { renderTable(result); },
+                error: function() { alert('Table rendering Failed!'); }
+            });
+        });
+
         function renderTable(data) {
             var table = $('#main-content');
-            var delteRoute =  'http://localhost:8000/api/expenses/delete';
+            var deleteRoute =  'http://localhost:8000/api/expenses/delete';
             //Process the data into nice table rows to be appended to HTML Table
+
+
             for (var i = 0, len = data.length; i < len; i++) {
 
                 var currentId = data[i].id;
@@ -80,24 +94,53 @@
                 table.append('<td>' + currentCost + '</td>');
                 table.append('<td>' + currentCurrency + '</td>');
                 table.append('<td>' + currentDate + '</td>');
-                table.append('<td>' + '<a class="container" href=' + delteRoute + '?id=' +currentId +
+                table.append('<td>' + '<a class="container delete" href=' + deleteRoute + '?id=' +currentId +
                              '>' + '<img src=' + '{{ asset('x-circle.svg') }}' + '></a>' + '</td>');
                 table.append('</tr>');
 
             }
 
-        }
+            $('a.delete').click(function(event) {
+                event.preventDefault();
+                var deleteUrl = $(event.currentTarget)[0].getAttribute('href');
+                swal({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    console.log(typeof result.value);
+                    if (result.value) {
 
-        $(document).ready(function(){
-                $.ajax({
-                    url: 'http://localhost:8000/api/expenses',
-                    type: 'GET',
-                    crossDomain: true,
-                    dataType: 'json',
-                    success: function(result) { renderTable(result); },
-                    error: function() { alert('Table rendering Failed!'); }
-                });
-        });
+                    $.ajax({
+                        url: deleteUrl,
+                        type: 'DELETE',
+                        crossDomain: true,
+                        dataType: 'json',
+                        success: function() {
+                            swal(
+                                'Deleted!',
+                                'Your entry has been successfully deleted!',
+                                'success'
+                            );
+                            location.reload();
+                        },
+                        error: function() {
+                            swal(
+                                'Failed!',
+                                'Your entry was not deleted!',
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+            });
+
+        }
 
     </script>
 </html>
