@@ -78,4 +78,20 @@ class ExpensesTest extends TestCase
                 'updated_at'
             ]]);
     }
+
+    public function testsGetWeeklyExpensesSuccessfully()
+    {
+
+        $this->json('get', '/api/expenses/weekly')
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+                'Sunday'
+            ]);
+    }
 }
