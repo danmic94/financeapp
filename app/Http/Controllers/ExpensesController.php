@@ -63,15 +63,75 @@ class ExpensesController extends Controller
         $sundayLastWeek = date("Y-m-d", strtotime("last sunday"));
         $mondayLastWeek = date("Y-m-d", strtotime("last week monday"));
 
-        $lastWeekData = $expenses::where('date', '>=', $mondayLastWeek)
+        $lastWeekData = $expenses::orderBy('date')
+            ->where('date', '>=', $mondayLastWeek)
             ->where('date', '<=', $sundayLastWeek)
             ->get();
 
+        $pluckedWeekData = $lastWeekData->pluck('date','cost')->all();
+        $returnData = $this->mergeLastWeekCosts($pluckedWeekData);
+
         if (isset($lastWeekData)) {
-            return response()->json($lastWeekData,200);
+            return response()->json($returnData,200);
         }
 
         return response()->json("Resource does not exist 404!",404);
+
+    }
+
+    /**
+     * Eliminates the costs that are more than once a day
+     *
+     * @param array $data
+     * @return array
+     */
+    private function mergeLastWeekCosts(array $data)
+    {
+        $monday = 0;
+        $tuesday = 0;
+        $wednesday= 0;
+        $thursday = 0;
+        $friday = 0;
+        $saturday = 0;
+        $sunday = 0;
+
+        foreach ($data as $cost => $day){
+            $stringDay = date("l", strtotime($day));
+
+            switch ($stringDay){
+                case "Monday":
+                    $monday += $cost;
+                    break;
+                case "Tuesday":
+                    $tuesday += $cost;
+                    break;
+                case "Wednesday":
+                    $wednesday += $cost;
+                    break;
+                case "Thursday":
+                    $thursday += $cost;
+                    break;
+                case "Friday":
+                    $friday += $cost;
+                    break;
+                case "Saturday":
+                    $saturday += $cost;
+                    break;
+                case "Sunday":
+                    $sunday += $cost;
+                    break;
+            }
+        }
+
+        return [
+            'Monday' => $monday,
+            'Tuesday' => $tuesday,
+            'Wednesday' => $wednesday,
+            'Thursday'=> $thursday,
+            'Friday' => $friday,
+            'Saturday' => $saturday,
+            'Sunday' => $sunday
+        ];
 
     }
 }

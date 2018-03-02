@@ -23,7 +23,7 @@ class ExpensesTableSeeder extends Seeder
                 'description' => $faker->realText(),
                 'cost' => $faker->numberBetween(1, 10000),
                 'currency' => 'RON',
-                'date' => $faker->date('Y-m-d')
+                'date' => $faker->dateTimeBetween('-30days','now')->format('y-m-d')
 
             ]);
         }
