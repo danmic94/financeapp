@@ -7,11 +7,23 @@ use Illuminate\Http\Request;
 
 class ExpensesController extends Controller
 {
+    /**
+     * Returns all available expenses entries from the db
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
     public function index()
     {
         return response(ExpensesModel::all(),200);
     }
 
+    /**
+     * Return only one entry determined by the ID
+     *
+     * @param Request $request
+     * @param ExpensesModel $expense
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show(Request $request,ExpensesModel $expense)
     {
         $requestedExpense = $expense::find($request->get('id'));
@@ -23,6 +35,12 @@ class ExpensesController extends Controller
         return response()->json($requestedExpense,200);
     }
 
+    /**
+     * Create a new entry using JSON standard structure
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request)
     {
 
@@ -31,6 +49,13 @@ class ExpensesController extends Controller
         return response()->json("Resource created successfully 201",201);
     }
 
+    /**
+     * Updates a existing entry using the ID and standard JSON structure
+     *
+     * @param Request $request
+     * @param ExpensesModel $expense
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, ExpensesModel $expense)
     {
 
@@ -46,6 +71,13 @@ class ExpensesController extends Controller
         return response()->json("The entry $entryId has been successfully updated!",200);
     }
 
+    /**
+     * Deletes a cost entry using the ID
+     *
+     * @param Request $request
+     * @param ExpensesModel $expense
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(Request $request,ExpensesModel $expense)
     {
         $requestedExpense = $expense::find($request->get('id'));
@@ -58,6 +90,12 @@ class ExpensesController extends Controller
         return response()->json('',204);
     }
 
+    /**
+     * Returns the costs from the previous week
+     *
+     * @param ExpensesModel $expenses
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function weekly(ExpensesModel $expenses)
     {
         $sundayLastWeek = date("Y-m-d", strtotime("last sunday"));
@@ -80,7 +118,7 @@ class ExpensesController extends Controller
     }
 
     /**
-     * Eliminates the costs that are more than once a day
+     * Totals each days costs eliminating multiple entries from the chart
      *
      * @param array $data
      * @return array
